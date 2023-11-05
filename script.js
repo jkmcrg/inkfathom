@@ -76,9 +76,12 @@ function getCardImageUrls(data, name) {
     name = name.substring(0, name.indexOf("lang:") - 1);
   }
 
-  const cardData = data.data.filter(
-    (x) => (x.printed_name ?? x.name).toUpperCase() === name.toUpperCase()
-  )[0];
+  const cardData = data.data.find(
+    (cardData) => {
+      const dataName = cardData.printed_name ?? cardData.name
+      return dataName.toUpperCase().indexOf(name.toUpperCase()) === 0
+    }
+  );
 
   if (cardData.card_faces && cardData.card_faces[0].image_uris)
     return [
@@ -264,7 +267,7 @@ function fill(value, cardType, configuration) {
         )
         .catch((e) => {
           appendToErrorList(card.name);
-          console.error(`Booo:\n ${e}`);
+          console.error(e);
         });
     });
 }
